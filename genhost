@@ -5,7 +5,7 @@
 #
 
 readonly wordlist='wordlist'
-readonly domain='example.com'
+domain=''
 
 # http://mywiki.wooledge.org/BashFAQ/026
 
@@ -18,7 +18,7 @@ rand() {
 
 # check for a positive integer argument
 if [[ -z $1 ]]; then
-  printf 'Usage: genhost <integer>\n'
+  printf 'Usage: genhost <integer> [domain]\n'
   printf 'Generate unused hostnames by randomly picking from a word list\n'
   exit 1
 else
@@ -27,6 +27,13 @@ else
     exit 1
   fi
 fi
+
+if [[ -n $2 ]]; then
+  domain=".${2}"
+else
+  domain=''
+fi
+
 
 # read the word list into memory, removing commented words;
 # then remove the trailing empty element, if any:
@@ -44,23 +51,14 @@ for i in $(seq $1); do
 
   # pick a random available word
   rand $n
-  printf '%s.%s\n' "${lines[r]}" "$domain"
+  a_idx=$r
+  rand $n
+  b_idx=$r
+  rand $n
+  c_idx=$r
 
-  # mark the word as used in the word list
-  case $OSTYPE in
-    darwin*)
-      sed -i '' "s/^${lines[r]}\$/#${lines[r]}/" "$wordlist"
-      ;;
-    linux*)
-      sed -i "s/^${lines[r]}\$/#${lines[r]}/" "$wordlist"
-      ;;
-    msys*)
-      sed -i "s/^${lines[r]}\$/#${lines[r]}/" "$wordlist"
-      ;;
-  esac
+  printf '%s-%s-%s%s\n' "${lines[a_idx]}" "${lines[b_idx]}" "${lines[c_idx]}" "$domain"
 
-  # remove the used word from the array to prevent duplicates
-  lines=(${lines[@]:0:$r} ${lines[@]:$(( $r + 1 ))})
   n=$(( n - 1 ))
 done
 

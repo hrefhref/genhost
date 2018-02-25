@@ -6,6 +6,12 @@ provided word list. The pool of words comes from Oren Tirosh's
 [mnemonic encoding](http://web.archive.org/web/20090918202746/http://tothink.com/mnemonic/wordlist.html)
 project.
 
+This project is forked from [elasticdog's genhost](https://github.com/elasticdog/genhost). Changes are:
+
+* do not keep track of used words
+* generates a three-words hostname
+* domain is optional (second argument)
+
 Usage
 -----
 
@@ -13,19 +19,16 @@ Just run the script and provide the number of hostnames you'd like to
 generate:
 
     $ ./genhost 4
-    romeo.example.com
-    holiday.example.com
-    jester.example.com
-    spiral.example.com
+    dublin-chaos-bambino
+    cloud-suzuki-podium
+    conan-mailbox-uncle
+    desert-scuba-gabriel
 
-All of those words will automatically be commented out in the word list
-and thus removed from the pool of future names. If a hostname has the
-potential to be confusing based on technical jargon (like
-`email.example.com`), simply ignore it and generate a replacement.
+And with a domain:
 
-For collaboration purposes, don't forget to commit the updated word list
-back to a shared Git repository so names do not get reused:
+    $ ./genhost 4 github.io
+    clarion-screen-money.github.io
+    python-bali-equator.github.io
+    stock-opus-master.github.io
+    second-tourist-anatomy.github.io
 
-    $ git add wordlist
-    $ git commit
-    $ git push
